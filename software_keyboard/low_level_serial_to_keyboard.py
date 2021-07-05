@@ -7,9 +7,21 @@ import serial.tools.list_ports
 
 ports = [comport.device for comport in serial.tools.list_ports.comports()]
 
-if(len(ports) == 1):
-    ser = serial.Serial(ports[0], 9600, timeout=0)
+while len(ports) < 1:
+    ports = [comport.device for comport in serial.tools.list_ports.comports()]
+    if len(ports) >= 1:
+        break
 
+while True:
+    try:
+        ser = serial.Serial(port = ports[0],
+                        baudrate=9600,
+                        parity=serial.PARITY_NONE,
+                        stopbits=serial.STOPBITS_ONE,
+                        bytesize=serial.EIGHTBITS)
+        break
+    except:
+        pass
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_KEYBOARD = 1
 KEYEVENTF_EXTENDEDKEY = 0x0001
@@ -96,7 +108,7 @@ flag_B = None
 while True:
     try:
         data = ser.readline().decode()
-        if(len(data) == 6):
+        if(len(data) == 8):
             if(data[0] == '1'):
                 PressKey(T_KEY)
                 flag_T = True
@@ -178,5 +190,12 @@ while True:
                 ReleaseKey(B_KEY)
                 flag_B = False
             
-    except ser.SerialTimeoutException:
-        print('Data could not be read')        
+    except:
+        try:
+            ser = serial.Serial(port = ports[0],
+                            baudrate=9600,
+                            parity=serial.PARITY_NONE,
+                            stopbits=serial.STOPBITS_ONE,
+                            bytesize=serial.EIGHTBITS)        
+        except:
+            pass
