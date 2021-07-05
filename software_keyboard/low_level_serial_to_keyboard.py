@@ -5,6 +5,7 @@ import serial
 import time
 import serial.tools.list_ports
 from flag import Flag
+from config import Config
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_KEYBOARD = 1
@@ -56,27 +57,6 @@ def ReleaseKey(hexKeyCode):
                             dwFlags=KEYEVENTF_KEYUP))
     user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
-T_KEY = 0x54
-U_KEY = 0x55
-
-# M: throttle 
-# F: break
-M_KEY = 0x4D
-F_KEY = 0x46
-
-# V: steer right
-# B: steer left
-V_KEY = 0x56
-B_KEY = 0x42
-
-O_KEY = 0x4F
-L_KEY = 0x4C
-
-I_KEY = 0x49
-K_KEY = 0x4B
-
-H_KEY = 0x48
-Y_KEY = 0x59
 
 ports = [comport.device for comport in serial.tools.list_ports.comports()]
 
@@ -103,84 +83,84 @@ while True:
         data = ser.readline().decode()
         if(len(data) == 8):
             if(data[0] == '1'):
-                PressKey(T_KEY)
+                PressKey(Config.T_KEY)
                 key_flag.T = True
                 key_flag.U = False
             elif(data[0] == '2'):
-                PressKey(U_KEY)
+                PressKey(Config.U_KEY)
                 key_flag.T = False
                 key_flag.U = True
             
             if(key_flag.T == True and key_flag.U == False):
-                ReleaseKey(U_KEY)
+                ReleaseKey(Config.U_KEY)
             elif(key_flag.U == True and key_flag.T == False):
-                ReleaseKey(T_KEY)  
+                ReleaseKey(Config.T_KEY)  
             if(data[0] == '0'):
                 if(key_flag.T == True):
-                    ReleaseKey(T_KEY)
+                    ReleaseKey(Config.T_KEY)
                 elif(key_flag.U == True):
-                    ReleaseKey(U_KEY)
+                    ReleaseKey(Config.U_KEY)
             
             if(data[1] == '1'):
-                PressKey(I_KEY)
+                PressKey(Config.I_KEY)
                 key_flag.I = True
                 key_flag.K = False
             elif(data[1] == '2'):
-                PressKey(K_KEY)
+                PressKey(Config.K_KEY)
                 key_flag.I = False
                 key_flag.K = True
             
             if(key_flag.I == True and key_flag.K == False):
-                ReleaseKey(K_KEY)
+                ReleaseKey(Config.K_KEY)
             elif(key_flag.K == True and key_flag.I == False):
-                ReleaseKey(I_KEY)  
+                ReleaseKey(Config.I_KEY)  
             if(data[1] == '0'):
                 if(key_flag.I == True):
-                    ReleaseKey(I_KEY)
+                    ReleaseKey(Config.I_KEY)
                 elif(key_flag.K == True):
-                    ReleaseKey(K_KEY)
+                    ReleaseKey(Config.K_KEY)
             
             if(data[2] == '1'):
-                PressKey(O_KEY)
+                PressKey(Config.O_KEY)
                 key_flag.O = True
                 key_flag.L = False
             elif(data[2] == '2'):
-                PressKey(L_KEY)
+                PressKey(Config.L_KEY)
                 key_flag.O = False
                 key_flag.L = True
             
             if(key_flag.O == True and key_flag.L == False):
-                ReleaseKey(L_KEY)
+                ReleaseKey(Config.L_KEY)
             elif(key_flag.L == True and key_flag.O == False):
-                ReleaseKey(O_KEY)  
+                ReleaseKey(Config.O_KEY)  
             if(data[2] == '0'):
                 if(key_flag.O == True):
-                    ReleaseKey(O_KEY)
+                    ReleaseKey(Config.O_KEY)
                 elif(key_flag.L == True):
-                    ReleaseKey(L_KEY)
+                    ReleaseKey(Config.L_KEY)
             
             if(data[3] == '1'):
-                PressKey(V_KEY)
+                PressKey(Config.V_KEY)
                 key_flag.V = True
 
             if(data[3] == '2' and key_flag.V == True):
-                ReleaseKey(V_KEY)
+                ReleaseKey(Config.V_KEY)
                 key_flag.V = False
 
             if(data[4] == '1'):
-                PressKey(M_KEY)
+                PressKey(Config.M_KEY)
                 key_flag.M = True
 
             if(data[4] == '2' and key_flag.M == True):
-                ReleaseKey(M_KEY)
+                ReleaseKey(Config.M_KEY)
                 key_flag.M = False
 
             if(data[5] == '1'):
-                PressKey(B_KEY)
+                PressKey(Config.B_KEY)
                 key_flag.B = True
 
             if(data[5] == '2' and key_flag.B == True):
-                ReleaseKey(B_KEY)
+                ReleaseKey(Config.B_KEY)
                 key_flag.B = False
             
     except:
